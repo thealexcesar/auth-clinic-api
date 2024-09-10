@@ -52,13 +52,220 @@ To run the application locally, follow these steps:
     http://localhost:8080
     ```
 
-### API Endpoints
+## API Endpoints
 
-- **/auth/register** (POST): Register a new user.
-- **/auth/login** (POST): Log in and receive a JWT token.
-- **/auth/logout** (POST): Log out the user.
-- **/consulta** (POST): Restricted to admin, doctors, and receptionists.
-- **/consulta** (GET): Restricted to admin, doctors, and patients.
+### Authentication
+
+- **POST /auth/register**
+    - **Description**: Registers a new user in the system.
+    - **Request Body**:
+      <details>
+      <summary>Example Request Body</summary>
+      ```json
+      {
+        "username": "user",
+        "password": "password",
+        "role": "ADMIN"
+      }
+      ```
+      </details>
+    - **Response**:
+        - **Status Code**: 201 Created
+        - **Body**:
+          <details>
+          <summary>Example Response Body</summary>
+          ```json
+          {
+            "id": 1,
+            "username": "user",
+            "role": "ADMIN"
+          }
+          ```
+          </details>
+        - **Headers**:
+          ```
+          Location: /auth/users/{userId}
+          ```
+
+- **POST /auth/login**
+    - **Description**: Logs in the user and returns a JWT token for authentication.
+    - **Request Body**:
+      <details>
+      <summary>Example Request Body</summary>
+      ```json
+      {
+        "username": "user",
+        "password": "password"
+      }
+      ```
+      </details>
+    - **Response**:
+      <details>
+      <summary>Example Response Body</summary>
+      ```json
+      {
+        "token": "jwt_token"
+      }
+      ```
+      </details>
+
+- **POST /auth/logout**
+    - **Description**: Logs out the user.
+    - **Response**:
+      <details>
+      <summary>Example Response Body</summary>
+      ```json
+      {
+        "message": "Logout successful"
+      }
+      ```
+      </details>
+
+### Consultations
+
+- **POST /consultations**
+    - **Description**: Creates a new consultation. Requires ADMIN, DOCTOR, or RECEPTIONIST permissions.
+    - **Request Body**:
+      <details>
+      <summary>Example Request Body</summary>
+      ```json
+      {
+        "date": "2024-09-10",
+        "diagnosis": "diagnosis",
+        "durationMinutes": 30,
+        "isEmergency": false,
+        "reason": "consultation reason",
+        "doctor": {
+          "id": 1
+        },
+        "patient": {
+          "id": 2
+        },
+        "symptoms": ["FEVER", "COUGH"]
+      }
+      ```
+      </details>
+    - **Response**:
+      <details>
+      <summary>Example Response Body</summary>
+      ```json
+      {
+        "id": 1,
+        "date": "2024-09-10",
+        "diagnosis": "diagnosis",
+        "durationMinutes": 30,
+        "isEmergency": false,
+        "reason": "consultation reason",
+        "doctor": {
+          "id": 1
+        },
+        "patient": {
+          "id": 2
+        },
+        "symptoms": ["FEVER", "COUGH"]
+      }
+      ```
+      </details>
+
+- **PUT /consultations/{id}**
+    - **Description**: Updates an existing consultation. Requires ADMIN, DOCTOR, or RECEPTIONIST permissions.
+    - **Request Body**:
+      <details>
+      <summary>Example Request Body</summary>
+      ```json
+      {
+        "date": "2024-09-10",
+        "diagnosis": "updated diagnosis",
+        "durationMinutes": 45,
+        "isEmergency": true,
+        "reason": "updated reason",
+        "doctor": {
+          "id": 1
+        },
+        "patient": {
+          "id": 2
+        },
+        "symptoms": ["HEADACHE"]
+      }
+      ```
+      </details>
+    - **Response**:
+      <details>
+      <summary>Example Response Body</summary>
+      ```json
+      {
+        "id": 1,
+        "date": "2024-09-10",
+        "diagnosis": "updated diagnosis",
+        "durationMinutes": 45,
+        "isEmergency": true,
+        "reason": "updated reason",
+        "doctor": {
+          "id": 1
+        },
+        "patient": {
+          "id": 2
+        },
+        "symptoms": ["HEADACHE"]
+      }
+      ```
+      </details>
+
+- **GET /consultations/{id}**
+    - **Description**: Retrieves a specific consultation by ID. Requires ADMIN, DOCTOR, or PATIENT permissions.
+    - **Response**:
+      <details>
+      <summary>Example Response Body</summary>
+      ```json
+      {
+        "id": 1,
+        "date": "2024-09-10",
+        "diagnosis": "diagnosis",
+        "durationMinutes": 30,
+        "isEmergency": false,
+        "reason": "consultation reason",
+        "doctor": {
+          "id": 1
+        },
+        "patient": {
+          "id": 2
+        },
+        "symptoms": ["FEVER", "COUGH"]
+      }
+      ```
+      </details>
+
+- **DELETE /consultations/{id}**
+    - **Description**: Deletes a specific consultation by ID. Requires ADMIN permissions.
+    - **Response**:
+      <details>
+      <summary>Example Response Body</summary>
+      ```json
+      {
+        "message": "Consultation deleted successfully"
+      }
+      ```
+      </details>
+
+## Testing with Postman
+
+1. **Environment Setup**:
+    - Create a new environment in Postman to store variables such as `baseUrl` and `token`.
+
+2. **Authentication**:
+    - **Request**: `POST /auth/login`
+    - **Body**: Enter user credentials to obtain the JWT token.
+    - **Save Token**: Store the token in the `token` environment variable.
+
+3. **Protected Endpoints**:
+    - Use the stored token in the `Authorization` header as `Bearer {token}` to access protected endpoints.
+
+4. **Testing Consultations**:
+    - **Create Consultation**: `POST /consultations`
+    - **Update Consultation**: `PUT /consultations/{id}`
+    - **Retrieve Consultation**: `GET /consultations/{id}`
+    - **Delete Consultation**: `DELETE /consultations/{id}`
+
 
 ### Database Configuration
 
