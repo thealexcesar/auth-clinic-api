@@ -1,8 +1,8 @@
-package com.authclinic.application;
+package com.authclinic.application.user;
 
-import com.authclinic.application.dtos.AuthDTO;
-import com.authclinic.application.dtos.RegisterDTO;
-import com.authclinic.application.dtos.UserResponseDTO;
+import com.authclinic.application.user.dtos.UserAuthDTO;
+import com.authclinic.application.user.dtos.UserRegisterDTO;
+import com.authclinic.application.user.dtos.UserResponseDTO;
 import com.authclinic.domain.user.UserModel;
 import com.authclinic.exceptions.InvalidCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -26,7 +26,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthDTO authDTO) {
+    public ResponseEntity<String> login(@RequestBody UserAuthDTO authDTO) {
         try {
             String token = userService.authenticate(authDTO);
             return ResponseEntity.ok(token);
@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody RegisterDTO dto) {
+    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRegisterDTO dto) {
         Long userId = userService.registerUser(dto);
         UserModel createdUser = userService.findUserById(userId);
         UserResponseDTO responseDTO = new UserResponseDTO(

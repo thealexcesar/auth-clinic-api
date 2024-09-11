@@ -1,7 +1,8 @@
-package com.authclinic.application;
+package com.authclinic.application.user;
 
-import com.authclinic.application.dtos.AuthDTO;
-import com.authclinic.application.dtos.RegisterDTO;
+import com.authclinic.application.TokenService;
+import com.authclinic.application.user.dtos.UserAuthDTO;
+import com.authclinic.application.user.dtos.UserRegisterDTO;
 import com.authclinic.domain.user.UserModel;
 import com.authclinic.exceptions.InvalidCredentialsException;
 import com.authclinic.exceptions.UserAlreadyExistsException;
@@ -25,7 +26,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String authenticate(AuthDTO authDTO) {
+    public String authenticate(UserAuthDTO authDTO) {
         Optional<UserModel> userOptional = userRepository.findByUsername(authDTO.username());
         if (userOptional.isPresent()) {
             UserModel user = userOptional.get();
@@ -36,7 +37,7 @@ public class UserService {
         throw new InvalidCredentialsException("Credenciais inválidas.");
     }
 
-    public Long registerUser(RegisterDTO dto) {
+    public Long registerUser(UserRegisterDTO dto) {
         if (userRepository.findByUsername(dto.username()).isPresent()) {
             throw new UserAlreadyExistsException("Username já existe, por favor tente outro.");
         }

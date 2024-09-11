@@ -1,4 +1,4 @@
-package com.authclinic.application;
+package com.authclinic.application.doctor_appointment;
 
 import com.authclinic.domain.doctor_appointment.DoctorAppointmentModel;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.authclinic.application.dtos;
+package com.authclinic.application.user.dtos;
 
 import com.authclinic.domain.user.RoleType;
 
