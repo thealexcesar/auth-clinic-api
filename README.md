@@ -54,7 +54,7 @@ mvn spring-boot:run
 4. **Access the API**:
 Once the application is running, you can access the API at:
 
-```http request
+```bash
 http://localhost:8080
 ```
 
